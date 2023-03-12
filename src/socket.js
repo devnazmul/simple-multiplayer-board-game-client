@@ -1,6 +1,6 @@
 import io from "socket.io-client";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://simple-multiplayer-board-game-server.vercel.app/";
 // const socket = io(ENDPOINT);
 const socket = io(ENDPOINT, {
   transports: ["websocket"],

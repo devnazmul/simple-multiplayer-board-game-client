@@ -23,17 +23,8 @@ const GameBoard = () => {
   const playerName = query.get("playerName");
   const gameStatus = query.get("gameState");
   const { gameId, numberOfPlayer, sizeOfBoard } = useParams();
-  // console.log({gameId, name, boardSize})
 
-  // useEffect(() => {
-  //   // const newSocket = io("http://localhost:5000");
-  //   setSocket(io);
-
-  //   return () => {
-  //     io.close();
-  //   };
-  // }, []);
-
+  
   useEffect(() => {
     io.emit("joinGame", gameId);
     io.on("playerJoined", (game) => {
