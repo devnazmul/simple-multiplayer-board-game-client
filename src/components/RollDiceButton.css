@@ -1,0 +1,48 @@
+.roll-dice-button {
+  background-color: #555;
+  color: #fff;
+  font-size: 1.5em;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease-in-out;
+}
+
+.roll-dice-button:hover {
+  background-color: #777;
+}
+
+.roll-dice-button.rolling {
+  background-color: #f0ad4e;
+}
+
+.dice {
+  font-size: 3em;
+  margin-right: 0.5em;
+}
+
+.roll-dice-button.rolling {
+  animation: roll 1s infinite;
+}
+
+@keyframes roll {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-90deg);
+  }
+  50% {
+    transform: rotate(-180deg);
+  }
+  75% {
+    transform: rotate(-270deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}

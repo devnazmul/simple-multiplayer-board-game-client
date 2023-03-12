@@ -1,0 +1,99 @@
+game-board-page {
+  display: flex;
+  justify-content: space-between;
+}
+
+.lobby-section {
+  width: 25%;
+}
+
+.board-section {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+}
+
+.board-section > div {
+  margin-bottom: 10px;
+}
+
+.board-section .label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.board-section .value {
+  font-weight: normal;
+}
+
+.game-board {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #e8f1f1;
+}
+
+.game-board-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-board-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.game-board-row > * {
+  margin: 5px;
+}
+
+@media only screen and (max-width: 768px) {
+  .game-board-page {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .lobby-section {
+    width: 100%;
+  }
+
+  .board-section {
+    margin-bottom: 20px;
+  }
+
+  .game-board {
+    width: 100%;
+  }
+}
+.detailsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.detailsTable td,
+.detailsTable th {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.detailsTable th {
+  text-align: left;
+  background-color: #f2f2f2;
+}
+
+.detailsTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.detailsTable tr:hover {
+  background-color: #ddd;
+}

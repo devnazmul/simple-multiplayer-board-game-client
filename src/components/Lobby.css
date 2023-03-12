@@ -1,0 +1,14 @@
+.lobby-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+@media only screen and (max-width: 720px) {
+  .lobby-container {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,77 @@
+.dice-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dice {
+  width: 70px;
+  height: 70px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: inset -8px -8px 8px rgba(255, 255, 255, 0.5),
+    inset 8px 8px 8px rgba(0, 0, 0, 0.1), -8px -8px 8px rgba(255, 255, 255, 0.5),
+    8px 8px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}
+
+.dice.rolling {
+  transform: scale(0.8);
+  animation: shake 0.8s ease;
+}
+
+.dice-face {
+  display: block;
+  width: 30px;
+  height: 30px;
+  background-color: #222;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dice-1 {
+  transform: rotate(180deg);
+}
+
+.dice-2 {
+  transform: rotate(-90deg);
+}
+
+.dice-3 {
+  transform: rotate(90deg);
+}
+
+.dice-4 {
+  transform: rotateY(180deg);
+}
+
+.dice-5 {
+  transform: rotateX(-90deg);
+}
+
+.dice-6 {
+  transform: rotateX(90deg);
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+  75% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
