@@ -23,13 +23,12 @@ const useStyles = makeStyles((theme) => ({
 
   closeButton: {
     position: "absolute",
-    top: theme.spacing(1),
-    right: theme.spacing(1),
+    top: "-10px",
+    right: "-25px",
   },
   answerInput: {
-    width: "80%",
-    height: "40px",
-    marginBottom: theme.spacing(2),
+    width: "100px",
+    marginLeft: "10px",
   },
   submitButton: {
     backgroundColor: "#009688",
@@ -51,11 +50,23 @@ const useStyles = makeStyles((theme) => ({
   },
   timer: {
     position: "absolute",
-    bottom: theme.spacing(1),
-    right: theme.spacing(1),
+    marginTop: "20px",
+    fontSize: "1.1rem",
+    color: "red",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%,-50%)",
+    fontWeight: "bold",
+  },
+  questionContainer: {
+    marginTop: "50px",
+  },
+  questionAndAnsContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));
-
 const QuestionModal = ({
   isOpen,
   question,
@@ -63,9 +74,11 @@ const QuestionModal = ({
   onSubmit,
   success,
   error,
+  timeLeft,
+  setTimeLeft
 }) => {
   const [answer, setAnswer] = useState("");
-  const [timeLeft, setTimeLeft] = useState(20);
+  
   const classes = useStyles();
 
   const showTimer = useMemo(() => isOpen && timeLeft > 0, [isOpen, timeLeft]);
@@ -76,12 +89,12 @@ const QuestionModal = ({
       timerId = setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
         if (timeLeft == 1) {
-          handleCancel()
+          handleCancel();
         }
       }, 1000);
     }
     return () => clearInterval(timerId);
-  }, [isOpen, showTimer, timeLeft,]);
+  }, [isOpen, showTimer, timeLeft]);
 
   const handleSubmit = useCallback(
     (event) => {
@@ -94,13 +107,7 @@ const QuestionModal = ({
 
   const handleCancel = () => {
     onSubmit(answer);
-    console.log('dfgdfgdgfdg')
   };
-
-  // console.log("QuestionModal: isOpen: ", isOpen);
-  // console.log("QuestionModal: question: ", question);
-  // console.log("QuestionModal: success: ", success);
-  // console.log("QuestionModal: error: ", error);
 
   return (
     <Modal
@@ -116,9 +123,6 @@ const QuestionModal = ({
       <Fade in={isOpen}>
         <div className={classes.paper}>
           <Box position='relative'>
-            <Typography variant='h5'>
-              {question.operand1} {question.operator} {question.operand2} =
-            </Typography>
             <Button
               className={classes.closeButton}
               onClick={handleCancel}
@@ -133,15 +137,20 @@ const QuestionModal = ({
               </Typography>
             )}
           </Box>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              className={classes.answerInput}
-              variant='outlined'
-              label='Answer'
-              type='number'
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-            />
+          <form className={classes.questionContainer} onSubmit={handleSubmit}>
+            <Box className={classes.questionAndAnsContainer}>
+              <Typography variant='h5'>
+                {question.operand1} {question.operator} {question.operand2} =
+              </Typography>
+              <TextField
+                className={classes.answerInput}
+                variant='outlined'
+                type='number'
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+              />
+            </Box>
+
             <Button
               className={classes.submitButton}
               type='submit'

@@ -23,8 +23,17 @@ const GameBoard = () => {
   const playerName = query.get("playerName");
   const gameStatus = query.get("gameState");
   const { gameId, numberOfPlayer, sizeOfBoard } = useParams();
+  // console.log({gameId, name, boardSize})
 
-  
+  // useEffect(() => {
+  //   // const newSocket = io("https://simple-socket-io-multi-player-math-game.onrender.com");
+  //   setSocket(io);
+
+  //   return () => {
+  //     io.close();
+  //   };
+  // }, []);
+
   useEffect(() => {
     io.emit("joinGame", gameId);
     io.on("playerJoined", (game) => {
@@ -113,7 +122,6 @@ const GameBoard = () => {
               <h1>Hi, {playerName} Welcome to the game.</h1>
               <h2>Share your game id to other player: {gameId}</h2>
               <h4>Please waiting for other players.</h4>
-              {/* <h4>Joined Player {players.length === 0 ? 1 : players.length}/{numberOfPlayer}</h4> */}
             </div>
           )}
         </div>

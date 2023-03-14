@@ -7,7 +7,7 @@ import GameBoardPage from "./components/GameBoardPage";
 import Lobby from "./components/Lobby";
 
 function App() {
-  axios.defaults.baseURL = "https://simple-multiplayer-board-game-server.vercel.app";
+  axios.defaults.baseURL = "https://simple-socket-io-multi-player-math-game.onrender.com";
   return (
     <Router>
       <Switch>

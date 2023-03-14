@@ -22,24 +22,6 @@ const Square = ({ value, onClick, disabled, item, cssClass }) => {
           <div className='counter'>
             {item?.alreadyPlayed ? <BiLock style={{ color: "red" }} /> : value}
           </div>
-          {console.log(item?.alreadyPlayed)}
-          {value.questionVisible && (
-            <div className='question'>
-              <div className='question-text'>
-                {value.operand1} {value.operator} {value.operand2} =
-              </div>
-              <input type='number' className='answer-input' />
-              <button className='submit-button' onClick={value.onSubmit}>
-                Submit
-              </button>
-            </div>
-          )}
-          {value.answerVisible && (
-            <div className='answer'>
-              {value.correctAnswer ? "Correct!" : "Wrong!"} The answer is{" "}
-              {value.answer}.
-            </div>
-          )}
         </>
       ) : (
         <div className='empty-square' />

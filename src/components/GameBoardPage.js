@@ -14,22 +14,66 @@ const GameBoardPage = () => {
   const [players, setPlayers] = useState([]);
   const [joinedPlayers, setJoinedPlayers] = useState(0);
   const [eventEmitted, setEventEmitted] = useState(false);
-
+  const [gameCompleted, setGameCompleted] = useState(false);
+  const [winner, setWinner] = useState(null);
+  const [playersRanking, setPlayersRanking] = useState([]);
+  const [timeLeft, setTimeLeft] = useState(20);
   const [selectedSquare, setSelectedSquare] = useState(-1);
   const [showModal, setShowModal] = useState(false);
   const [timer, setTimer] = useState(0);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  socket.on("scoreChange", (data) => {
-    console.log("Received scoreChange event with data:", data);
-    setGameDetails(data);
-    setBoard(data.board);
-    setPlayers(data.players);
-    setJoinedPlayers(data?.players.length);
-    setEventEmitted(false);
-    // Set board state from API call
-  });
+  useEffect(() => {
+    const handleScoreChange = (data) => {
+      setGameDetails(data);
+      setBoard(data.board);
+      setPlayers(data.players);
+      setJoinedPlayers(data?.players.length);
+      setEventEmitted(true);
+    };
+    // subscribe to the scoreChange event
+    socket.on("scoreChange", handleScoreChange);
+
+    // unsubscribe from the scoreChange event before component unmounts
+    return () => {
+      socket.off("scoreChange", handleScoreChange);
+    };
+  }, []);
+
+  const handleGameCompleted = (data) => {
+    console.log("Received gamecompleted event ");
+    setIsLoading(true)
+    setGameCompleted(true);
+    setWinner(data.winner);
+    setPlayersRanking(data.playersRanking);
+    console.log("Received gamecompleted event with data:", data.winner);
+  };
+
+  // subscribe to the gamecompleted event
+  socket.on("gamecompleted", handleGameCompleted);
+
+  // const isMountedRef = useRef(true);
+
+  // useEffect(() => {
+  //   // listen for the "gamecompleted" socket event
+  //   socket.on("gamecompleted", ({ winner, playersRanking }) => {
+  //     if (isMountedRef.current) {
+  //       setIsLoading(false);
+  //       setGameCompleted(true);
+  //       setWinner(winner);
+  //       setGameDetails(false);
+  //       setPlayersRanking(playersRanking);
+  //       console.log("Received gamecompleted event with data:", winner);
+  //     }
+  //   });
+
+  //   // cleanup function to remove event listener and set isMountedRef to false
+  //   return () => {
+  //     isMountedRef.current = false;
+  //     socket.off("gamecompleted");
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (timer > 0) {
@@ -56,7 +100,6 @@ const GameBoardPage = () => {
     if (selectedSquare !== -1) {
       console.log("Selected Square: ", selectedSquare);
       setEventEmitted(false);
-      setTimer(0);
       setShowModal(true);
     }
   }, [selectedSquare, setShowModal]);
@@ -64,68 +107,23 @@ const GameBoardPage = () => {
   const handleModalClose = () => {
     setSelectedSquare(-1);
     setShowModal(false);
-    setTimer(0);
   };
 
   const handleAnswerSubmit = async (answer) => {
-    console.log("handleAnswerSubmit called");
     const score =
       answer == parseInt(board[selectedSquare].answer)
         ? parseInt(board[selectedSquare].answer)
         : 0;
     const playerIndex = players.findIndex((player) => player.id === socket.id);
-
-    console.log(board[selectedSquare], score);
     const response = await axios.post(
       `/game/${gameId}/score/${playerIndex}/${selectedSquare}`,
-      { score: score }
+      { score: score, timeOfSubmision: 20 - timeLeft }
     );
     setGameDetails(response.data);
     setBoard(response.data.board); // Set board state from API call
     setShowModal(false);
     setTimer(0);
   };
-
-  // const handleAnswerSubmit = (answer) => {
-  //   const score =
-  //     answer == parseInt(board[selectedSquare].answer)
-  //       ? parseInt(board[selectedSquare].answer)
-  //       : 0;
-  //   console.log("----", board[selectedSquare].answer, "   -   ", answer);
-  //   console.log("score   -  ", score);
-  //   // if (score) {
-  //   console.log(board[selectedSquare]);
-  //   socket.emit("updateScore", {
-  //     gameId,
-  //     playerIndex: players.findIndex((player) => player.id === socket.id),
-  //     selectedSquare,
-  //     score,
-  //   });
-  //   // }
-  //   setShowModal(false);
-  //   setTimer(0);
-  // };
-
-  // const handleAnswerSubmit = (answer) => {
-  //   console.log("handleAnswerSubmit called");
-  //   const score =
-  //     answer == parseInt(board[selectedSquare].answer)
-  //       ? parseInt(board[selectedSquare].answer)
-  //       : 0;
-
-  //   if (!eventEmitted) {
-  //     socket.emit("updateScore", {
-  //       gameId,
-  //       playerIndex: players.findIndex((player) => player.id === socket.id),
-  //       selectedSquare,
-  //       score,
-  //     });
-  //     setEventEmitted(true);
-  //   }
-
-  //   setShowModal(false);
-  //   setTimer(0);
-  // };
 
   socket.on("playerJoined", (data) => {
     console.log({ playerJoin: data });
@@ -143,6 +141,7 @@ const GameBoardPage = () => {
         setPlayers(response.data.players);
         setJoinedPlayers(response.data?.players.length); // Set board state from API call
         setIsLoading(false);
+        setGameCompleted(false)
       } catch (error) {
         console.log(error);
       }
@@ -154,9 +153,6 @@ const GameBoardPage = () => {
     setGameStarted(true);
   });
 
-  useEffect(() => {
-    console.log({ gameDetails });
-  }, [gameDetails]);
 
   return (
     <div className='game-board'>
@@ -177,7 +173,7 @@ const GameBoardPage = () => {
         </div>
       ) : (
         <>
-          {!isLoading && (
+          {(!isLoading && !gameCompleted) && (
             <div>
               <h1 className='board-header'>Game Board</h1>
               <div>
@@ -190,7 +186,7 @@ const GameBoardPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {gameDetails.players.map((player) => (
+                      {gameDetails?.players !== undefined && gameDetails?.players.map((player) => (
                         <tr key={player.id}>
                           <td>
                             {player.id === socket.id ? (
@@ -206,19 +202,19 @@ const GameBoardPage = () => {
                         <td>
                           <strong>Board Size:</strong>
                         </td>
-                        <td>{gameDetails.board.length}</td>
+                        <td>{gameDetails.board !== undefined && gameDetails?.board?.length}</td>
                       </tr>
                       <tr>
                         <td>
                           <strong>Number of Players:</strong>
                         </td>
-                        <td>{gameDetails.numPlayers}</td>
+                        <td>{gameDetails?.numPlayers}</td>
                       </tr>
                       <tr>
                         <td>
                           <strong>Number of Turns:</strong>
                         </td>
-                        <td>{gameDetails.numTurns}</td>
+                        <td>{gameDetails?.numTurns}</td>
                       </tr>
                       <tr>
                         <td>
@@ -234,7 +230,7 @@ const GameBoardPage = () => {
                   {timer > 0 && <div className='timer'>Time left: {timer}</div>}
                 </div>
                 <div className='game-board'>
-                  {board.map((item, index) => (
+                  {board !== undefined && board.map((item, index) => (
                     <div className='game-board-row' key={index}>
                       <div className='game-board-col'>
                         <Square
@@ -248,8 +244,10 @@ const GameBoardPage = () => {
                     </div>
                   ))}
                 </div>
-                {showModal && (
+                {showModal && board !== undefined && (
                   <QuestionModal
+                    timeLeft={timeLeft}
+                    setTimeLeft={setTimeLeft}
                     question={{
                       operand1: board[selectedSquare].operand1,
                       operator: board[selectedSquare].operator,
@@ -258,9 +256,37 @@ const GameBoardPage = () => {
                     onClose={handleModalClose}
                     onSubmit={handleAnswerSubmit}
                     isOpen={showModal}
-                    setIsOpen={setShowModal}
                   />
                 )}
+              </div>
+            </div>
+          )}
+          {(isLoading && gameCompleted) && (
+            <div>
+              <h1 className='board-header'>Game Over</h1>
+              <div>
+                <h2>Game Winner: {winner}</h2>
+                <div className='player-ranking'>
+                  <h2>Player Ranking</h2>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Score</th>
+                        <th>Turns</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {playersRanking.map((player) => (
+                        <tr key={player.id}>
+                          <td>{player.name}</td>
+                          <td>{player.score}</td>
+                          <td>{player.turns}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}
