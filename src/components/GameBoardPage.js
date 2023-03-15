@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { BiCheck, BiX } from "react-icons/bi";
+import { BsClockHistory } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import socket from "../socket";
 import "./GameBoardPage.css"; // Import the CSS file
@@ -7,13 +9,13 @@ import QuestionModal from "./QuestionModal";
 import Square from "./Square";
 
 const GameBoardPage = () => {
+  const { gameId, numPlayers, numberOfPlayer } = useParams();
+
   const [gameDetails, setGameDetails] = useState(null);
   const [gameStarted, setGameStarted] = useState(false); // add state to track game started status
-  const { gameId, numPlayers, boardSize } = useParams();
   const [board, setBoard] = useState(null); // Add state for the board
   const [players, setPlayers] = useState([]);
   const [joinedPlayers, setJoinedPlayers] = useState(0);
-  const [eventEmitted, setEventEmitted] = useState(false);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [winner, setWinner] = useState(null);
   const [playersRanking, setPlayersRanking] = useState([]);
@@ -21,8 +23,28 @@ const GameBoardPage = () => {
   const [selectedSquare, setSelectedSquare] = useState(-1);
   const [showModal, setShowModal] = useState(false);
   const [timer, setTimer] = useState(0);
-
   const [isLoading, setIsLoading] = useState(true);
+
+  const currentPlayer = players.find((player) => player.id === socket.id);
+
+  const [turnTimeLeft, setTurnTimeLeft] = useState(10);
+
+
+
+  useEffect(() => {
+    let timerId;
+    if ((turnTimeLeft > 0) && (currentPlayer && currentPlayer.nextTurn)) {
+      timerId = setInterval(() => {
+        setTurnTimeLeft(turnTimeLeft - 1);
+      }, 1000);
+    } else if (turnTimeLeft === 0) {
+      const unusedBox = board.filter(obj => !obj.alreadyPlayed);
+      setTurnTimeLeft(-1);
+      setSelectedSquare(unusedBox[Math.floor(Math.random() * unusedBox.length)]?.counter)
+    }
+    return () => clearInterval(timerId);
+  }, [turnTimeLeft, currentPlayer]);
+
 
   useEffect(() => {
     const handleScoreChange = (data) => {
@@ -30,7 +52,7 @@ const GameBoardPage = () => {
       setBoard(data.board);
       setPlayers(data.players);
       setJoinedPlayers(data?.players.length);
-      setEventEmitted(true);
+      setTurnTimeLeft(10)
     };
     // subscribe to the scoreChange event
     socket.on("scoreChange", handleScoreChange);
@@ -39,41 +61,44 @@ const GameBoardPage = () => {
     return () => {
       socket.off("scoreChange", handleScoreChange);
     };
+
   }, []);
 
-  const handleGameCompleted = (data) => {
-    console.log("Received gamecompleted event ");
-    setIsLoading(true)
-    setGameCompleted(true);
-    setWinner(data.winner);
-    setPlayersRanking(data.playersRanking);
-    console.log("Received gamecompleted event with data:", data.winner);
-  };
 
-  // subscribe to the gamecompleted event
-  socket.on("gamecompleted", handleGameCompleted);
+  useEffect(() => {
+    const handleGameCompleted = (data) => {
+      setIsLoading(true);
+      setGameCompleted(true);
+      setWinner(data.winner);
+      console.log(data);
+      setPlayersRanking(data.playersRanking);
+    };
+    // subscribe to the scoreChange event
+    socket.on("gamecompleted", handleGameCompleted);
 
-  // const isMountedRef = useRef(true);
+    // unsubscribe from the scoreChange event before component unmounts
+    return () => {
+      socket.off("scoreChange", handleGameCompleted);
+    };
+  }, []);
 
-  // useEffect(() => {
-  //   // listen for the "gamecompleted" socket event
-  //   socket.on("gamecompleted", ({ winner, playersRanking }) => {
-  //     if (isMountedRef.current) {
-  //       setIsLoading(false);
-  //       setGameCompleted(true);
-  //       setWinner(winner);
-  //       setGameDetails(false);
-  //       setPlayersRanking(playersRanking);
-  //       console.log("Received gamecompleted event with data:", winner);
-  //     }
-  //   });
+  useEffect(() => {
+    setIsLoading(true);
+    const getGameDetails = async () => {
+      try {
+        const response = await axios.get(`/game/${gameId}`);
+        setGameDetails(response.data);
+        setBoard(response.data.board); // Set board state from API call
+        setPlayers(response.data.players);
+        setJoinedPlayers(response.data?.players.length); // Set board state from API call
+        setIsLoading(false);
+        setGameCompleted(false);
+      } catch (error) {
+      }
+    };
+    getGameDetails();
+  }, [gameId]);
 
-  //   // cleanup function to remove event listener and set isMountedRef to false
-  //   return () => {
-  //     isMountedRef.current = false;
-  //     socket.off("gamecompleted");
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (timer > 0) {
@@ -84,30 +109,27 @@ const GameBoardPage = () => {
     }
   }, [timer]);
 
-  // console.log(`Game is in Board Page ${gameDetails}`);
-
-  const handleSquareClick = (index) => {
-    console.log("Players Array:", players);
-    const currentPlayer = players.find((player) => player.id === socket.id);
-    console.log("Current Player:", currentPlayer);
-    if (currentPlayer && currentPlayer.nextTurn) {
-      console.log("Square Index Clicked ", index);
-      setSelectedSquare(index);
-    }
-  };
 
   useEffect(() => {
     if (selectedSquare !== -1) {
-      console.log("Selected Square: ", selectedSquare);
-      setEventEmitted(false);
       setShowModal(true);
     }
-  }, [selectedSquare, setShowModal]);
+  }, [selectedSquare]);
+
+
+  const handleSquareClick = (index) => {
+    if (currentPlayer && currentPlayer.nextTurn) {
+      setSelectedSquare(index);
+      setTurnTimeLeft(-1)
+    }
+  };
+
 
   const handleModalClose = () => {
     setSelectedSquare(-1);
     setShowModal(false);
   };
+
 
   const handleAnswerSubmit = async (answer) => {
     const score =
@@ -117,7 +139,7 @@ const GameBoardPage = () => {
     const playerIndex = players.findIndex((player) => player.id === socket.id);
     const response = await axios.post(
       `/game/${gameId}/score/${playerIndex}/${selectedSquare}`,
-      { score: score, timeOfSubmision: 20 - timeLeft }
+      { score: score, playerAnswer: answer, timeToAnswer: 20 - timeLeft }
     );
     setGameDetails(response.data);
     setBoard(response.data.board); // Set board state from API call
@@ -125,55 +147,56 @@ const GameBoardPage = () => {
     setTimer(0);
   };
 
+
   socket.on("playerJoined", (data) => {
-    console.log({ playerJoin: data });
     setJoinedPlayers(data?.players.length);
   });
 
-  useEffect(() => {
-    setIsLoading(true);
-    const getGameDetails = async () => {
-      try {
-        const response = await axios.get(`/game/${gameId}`);
-        console.log({ res: response.data });
-        setGameDetails(response.data);
-        setBoard(response.data.board); // Set board state from API call
-        setPlayers(response.data.players);
-        setJoinedPlayers(response.data?.players.length); // Set board state from API call
-        setIsLoading(false);
-        setGameCompleted(false)
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getGameDetails();
-  }, [gameId]);
-
   socket.on("game-started", (data) => {
     setGameStarted(true);
+    setTurnTimeLeft(10)
   });
-
 
   return (
     <div className='game-board'>
       {!gameStarted && !isLoading ? (
         <div className='lobby-section'>
           <h1>Waiting for the game to start...</h1>
-          <div>Game ID: {gameId}</div>
-          <div>Number of Players: {numPlayers}</div>
-          {gameDetails && (
-            <div>
-              <div>Players Joined: {gameDetails.players.length}</div>
-              <div>
-                Players Name:{" "}
-                {gameDetails.players.map((player) => player.name).join(", ")}
-              </div>
-            </div>
-          )}
+          <table className='detailsTable'>
+            <tbody>
+              <tr>
+                <td>
+                  <label>Game ID:</label>
+                </td>
+                <td>{gameId}</td>
+              </tr>
+              <tr>
+                <td>Number of Players:</td>
+                <td>{numberOfPlayer}</td>
+              </tr>
+
+              {gameDetails && (
+                <React.Fragment>
+                  <tr>
+                    <td>Players Joined:</td>
+                    <td>{gameDetails.players.length}</td>
+                  </tr>
+                  <tr>
+                    <td>Your Name:</td>
+                    <td>
+                      {gameDetails.players
+                        .map((player) => player.name)
+                        .join(", ")}
+                    </td>
+                  </tr>
+                </React.Fragment>
+              )}
+            </tbody>
+          </table>
         </div>
       ) : (
         <>
-          {(!isLoading && !gameCompleted) && (
+          {!isLoading && !gameCompleted && (
             <div>
               <h1 className='board-header'>Game Board</h1>
               <div>
@@ -186,23 +209,27 @@ const GameBoardPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {gameDetails?.players !== undefined && gameDetails?.players.map((player) => (
-                        <tr key={player.id}>
-                          <td>
-                            {player.id === socket.id ? (
-                              <strong>{player.name}</strong>
-                            ) : (
-                              player.name
-                            )}
-                          </td>
-                          <td>{player.score}</td>
-                        </tr>
-                      ))}
+                      {gameDetails?.players !== undefined &&
+                        gameDetails?.players.map((player) => (
+                          <tr key={player.id}>
+                            <td>
+                              {player.id === socket.id ? (
+                                <strong>{player.name}</strong>
+                              ) : (
+                                player.name
+                              )}
+                            </td>
+                            <td>{player.score}</td>
+                          </tr>
+                        ))}
                       <tr>
                         <td>
                           <strong>Board Size:</strong>
                         </td>
-                        <td>{gameDetails.board !== undefined && gameDetails?.board?.length}</td>
+                        <td>
+                          {gameDetails.board !== undefined &&
+                            gameDetails?.board?.length}
+                        </td>
                       </tr>
                       <tr>
                         <td>
@@ -224,26 +251,33 @@ const GameBoardPage = () => {
                       </tr>
                     </tbody>
                   </table>
-
-                  <h2 style={{ textAlign: "center" }}>Please Select A Box</h2>
-
-                  {timer > 0 && <div className='timer'>Time left: {timer}</div>}
+                  <div>
+                    {!(currentPlayer && currentPlayer.nextTurn) ?
+                      <h2 style={{ textAlign: "center", color: 'red' }}>Please wait for your.</h2>
+                      :
+                      <h2 style={{ textAlign: "center", color: 'green' }}>Its your turn. Please Select A Box</h2>
+                    }
+                  </div>
+                  {(currentPlayer && currentPlayer.nextTurn && turnTimeLeft !== -1) && <h4 style={{ display: 'flex', gap: 3, justifyContent: 'center', alignItems: 'center' }}>Your turn end in : <BsClockHistory /> {turnTimeLeft} sec</h4>}
                 </div>
+
                 <div className='game-board'>
-                  {board !== undefined && board.map((item, index) => (
-                    <div className='game-board-row' key={index}>
-                      <div className='game-board-col'>
-                        <Square
-                          item={item}
-                          key={index}
-                          value={item.counter}
-                          onClick={() => handleSquareClick(item.counter)}
-                          cssClass={`square-${index % 5}`} // add cssClass prop with a value of `square-0`, `square-1`, `square-2`, or `square-3`
-                        />
+                  {board !== undefined &&
+                    board.map((item, index) => (
+                      <div className='game-board-row' key={index}>
+                        <div className='game-board-col'>
+                          <Square
+                            item={item}
+                            key={index}
+                            value={item.counter}
+                            onClick={() => handleSquareClick(item.counter)}
+                            cssClass={`square-${index % 5}`}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
+
                 {showModal && board !== undefined && (
                   <QuestionModal
                     timeLeft={timeLeft}
@@ -256,19 +290,21 @@ const GameBoardPage = () => {
                     onClose={handleModalClose}
                     onSubmit={handleAnswerSubmit}
                     isOpen={showModal}
+                    setIsOpen={setShowModal}
                   />
                 )}
               </div>
             </div>
           )}
-          {(isLoading && gameCompleted) && (
+          {isLoading && gameCompleted && (
             <div>
               <h1 className='board-header'>Game Over</h1>
               <div>
+                <img src={`${players.find((player) => player.id === socket.id).name == winner ? '/images/win.gif' : '/images/loss.gif'}`} alt='game over' />
                 <h2>Game Winner: {winner}</h2>
                 <div className='player-ranking'>
                   <h2>Player Ranking</h2>
-                  <table>
+                  <table className='detailsTable'>
                     <thead>
                       <tr>
                         <th>Name</th>
@@ -287,6 +323,43 @@ const GameBoardPage = () => {
                     </tbody>
                   </table>
                 </div>
+
+                {players.map((player) => {
+                  if (player.id === socket.id) {
+                    return (
+                      <div key={player.id} className='player-details'>
+                        <h2>Your Questions Details</h2>
+                        <table className='detailsTable'>
+                          <thead>
+                            <tr>
+                              <th>Question</th>
+                              <th>Your Answer</th>
+                              <th>Is Correct</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {player.questions.map((question) => (
+                              <tr key={question.question}>
+                                <td>{question.question}</td>
+                                <td>{question.answer}</td>
+                                <td>
+                                  {question.isCorrect ?
+                                    <span style={{ color: 'green' }}>
+                                      <BiCheck style={{ fontSize: '20px' }} />
+                                    </span>
+                                    :
+                                    <span style={{ color: 'red' }}>
+                                      <BiX style={{ fontSize: '20px' }} />
+                                    </span>}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    );
+                  }
+                })}
               </div>
             </div>
           )}

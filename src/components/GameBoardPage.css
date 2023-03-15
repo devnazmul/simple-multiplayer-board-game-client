@@ -4,7 +4,7 @@ game-board-page {
 }
 
 .lobby-section {
-  width: 25%;
+  width: 60%;
 }
 
 .board-section {
@@ -96,4 +96,55 @@ game-board-page {
 
 .detailsTable tr:hover {
   background-color: #ddd;
+}
+
+.player-ranking {
+  margin-bottom: 20px;
+}
+
+.player-ranking h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+.player-details {
+  margin-top: 20px;
+}
+
+.player-details h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.player-details table {
+  margin-top: 10px;
+}
+
+.player-details th {
+  background-color: #ddd;
+}
+
+.player-details tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.player-details td:last-child {
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
+.player-details td:last-child::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.player-details td:last-child::before.correct {
+  background-color: green;
+}
+
+.player-details td:last-child::before.incorrect {
+  background-color: red;
 }

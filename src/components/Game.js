@@ -10,7 +10,6 @@ const Game = ({ playerName, boardSize, gameId, socket }) => {
   const [opponentScore, setOpponentScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
 
-  console.log("Game Page is Game.js");
   useEffect(() => {
     socket.emit("join-game", { gameId, playerName });
     socket.on("game-start", ({ isMyTurn }) => {

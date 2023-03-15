@@ -1,8 +1,7 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import "./NewGame.css";
 import socket from "../socket";
+import "./NewGame.css";
 
 const NewGameForm = () => {
   const [playerName, setPlayerName] = useState("");
@@ -49,11 +48,8 @@ const NewGameForm = () => {
   };
 
   socket.on("game_creation_success", (game) => {
-    console.log("game_created event received:", game.gameDetails);
     setGameDetails(game.gameDetails);
 
-    // if (gameDetails) {
-    // console.log("ggameDetails received:", gameDetails);
     history.push(
       `/game-board/${game.gameDetails.gameId}/${game.gameDetails.numPlayers}/${game.gameDetails.boardSize}?playerName=${game.gameDetails.playerName}`
     );
@@ -61,7 +57,6 @@ const NewGameForm = () => {
   });
 
   socket.on("game_creation_failed", (error) => {
-    console.log("game_creation_failed event received:", error);
     setGameDetails(null);
     setErrorMessage(error);
   });

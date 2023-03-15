@@ -2,18 +2,17 @@ import React from "react";
 import { BiLock } from "react-icons/bi";
 import "./Square.css";
 
-const Square = ({ value, onClick, disabled, item, cssClass }) => {
+const Square = ({ value, onClick, item, cssClass }) => {
   const handleClick = () => {
     if (value.counter !== null) {
       onClick();
     }
   };
 
-  // console.log("Square value:", value); // add console log to check value
 
   return (
     <button
-      disabled={disabled}
+      disabled={item?.alreadyPlayed}
       className={`square ${cssClass}`}
       onClick={handleClick}
     >

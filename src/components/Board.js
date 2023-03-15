@@ -10,8 +10,11 @@ const Board = ({ boxes, currentPlayer, onBoxClick }) => {
     const isCurrentPlayer = currentPlayer === box.player;
 
     return (
-      <div key={index} className={classNames("box", { player1: isPlayer1, player2: isPlayer2, })} onClick={() => onBoxClick(index)} >
-        <span>{box.number}</span>
+      <div
+        key={index}
+        className={classNames("box", { player1: isPlayer1, player2: isPlayer2, })}
+        onClick={() => onBoxClick(index)} >
+        <span>{box.number+1}</span>
         {isCurrentPlayer && <div className='number'>{index + 1}</div>}
       </div>
     );

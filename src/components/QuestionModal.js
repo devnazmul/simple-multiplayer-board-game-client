@@ -67,18 +67,18 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
 }));
+
 const QuestionModal = ({
+  setIsOpen,
   isOpen,
   question,
   onClose,
   onSubmit,
   success,
   error,
-  timeLeft,
-  setTimeLeft
 }) => {
-  const [answer, setAnswer] = useState("");
-  
+  const [answer, setAnswer] = useState('');
+  const [timeLeft, setTimeLeft] = useState(20);
   const classes = useStyles();
 
   const showTimer = useMemo(() => isOpen && timeLeft > 0, [isOpen, timeLeft]);
@@ -90,6 +90,8 @@ const QuestionModal = ({
         setTimeLeft((prevTime) => prevTime - 1);
         if (timeLeft == 1) {
           handleCancel();
+          setIsOpen(false)
+
         }
       }, 1000);
     }
@@ -99,14 +101,17 @@ const QuestionModal = ({
   const handleSubmit = useCallback(
     (event) => {
       event.preventDefault();
-      onSubmit(answer);
+      onSubmit(answer === '' ? 0 : answer);
+      setIsOpen(false)
       setTimeLeft(0);
     },
     [onSubmit, answer]
   );
 
   const handleCancel = () => {
-    onSubmit(answer);
+    onSubmit(answer === '' ? 0 : answer);
+    setIsOpen(false)
+
   };
 
   return (
@@ -116,9 +121,7 @@ const QuestionModal = ({
       onClose={handleCancel}
       closeAfterTransition
       BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
+      BackdropProps={{ timeout: 500 }}
     >
       <Fade in={isOpen}>
         <div className={classes.paper}>
@@ -140,8 +143,15 @@ const QuestionModal = ({
           <form className={classes.questionContainer} onSubmit={handleSubmit}>
             <Box className={classes.questionAndAnsContainer}>
               <Typography variant='h5'>
-                {question.operand1} {question.operator} {question.operand2} =
+                {question.operand1}{" "}
+                {question.operator === "/"
+                  ? "÷"
+                  : question.operator === "*"
+                    ? "×"
+                    : question.operator}{" "}
+                {question.operand2} =
               </Typography>
+
               <TextField
                 className={classes.answerInput}
                 variant='outlined'
