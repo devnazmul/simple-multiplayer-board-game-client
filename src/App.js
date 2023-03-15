@@ -6,7 +6,7 @@ import GameBoardPage from "./components/GameBoardPage";
 import Lobby from "./components/Lobby";
 
 function App() {
-  axios.defaults.baseURL = "http://localhost:5000";
+  axios.defaults.baseURL = "https://simple-socket-io-multi-player-math-game.onrender.com";
   return (
     <Router>
       <Switch>
