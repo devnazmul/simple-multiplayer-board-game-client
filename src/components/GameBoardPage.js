@@ -168,9 +168,9 @@ const GameBoardPage = () => {
             <tbody>
               <tr>
                 <td>
-                  <label>Game ID:</label>
+                  <label>Join Link:</label>
                 </td>
-                <td>{gameId}</td>
+                <td>https://simple-multiplayer-board-game-client.vercel.app/join-game/{gameId}</td>
               </tr>
               <tr>
                 <td>Number of Players:</td>

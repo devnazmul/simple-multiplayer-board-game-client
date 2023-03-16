@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import GameBoardPage from "./components/GameBoardPage";
+import JoinGameBoard from "./components/JoinGameBoard";
 import Lobby from "./components/Lobby";
 
 function App() {
@@ -15,6 +16,11 @@ function App() {
           exact
           path='/game-board/:gameId/:numberOfPlayer/:sizeOfBoard'
           component={GameBoardPage}
+        />
+        <Route
+          exact
+          path='/join-game/:gameId'
+          component={JoinGameBoard}
         />
       </Switch>
     </Router>
