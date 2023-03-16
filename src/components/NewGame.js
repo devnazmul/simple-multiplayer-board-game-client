@@ -119,11 +119,7 @@ const NewGameForm = () => {
               min='5'
               max='20'
               value={numTurns}
-              onChange={(e) =>
-                setNumTurns(
-                  e.target.value.trim() !== "" ? parseInt(e.target.value) : ""
-                )
-              }
+              onChange={(e) =>setNumTurns(e.target.value.trim() !== "" ? parseInt(e.target.value) : "")}
             />
           </label>
         </div>

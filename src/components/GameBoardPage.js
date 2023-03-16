@@ -2,14 +2,16 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BiCheck, BiX } from "react-icons/bi";
 import { BsClockHistory } from "react-icons/bs";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import socket from "../socket";
 import "./GameBoardPage.css"; // Import the CSS file
 import QuestionModal from "./QuestionModal";
 import Square from "./Square";
 
 const GameBoardPage = () => {
-  const { gameId, numPlayers, numberOfPlayer } = useParams();
+  const { gameId, numberOfPlayer } = useParams();
+
+  const history = useHistory()
 
   const [gameDetails, setGameDetails] = useState(null);
   const [gameStarted, setGameStarted] = useState(false); // add state to track game started status
@@ -33,7 +35,7 @@ const GameBoardPage = () => {
 
   useEffect(() => {
     let timerId;
-    if ((turnTimeLeft > 0) && (currentPlayer && currentPlayer.nextTurn)) {
+    if ((turnTimeLeft > 0) && (currentPlayer && currentPlayer.nextTurn) && gameStarted) {
       timerId = setInterval(() => {
         setTurnTimeLeft(turnTimeLeft - 1);
       }, 1000);
@@ -43,7 +45,7 @@ const GameBoardPage = () => {
       setSelectedSquare(unusedBox[Math.floor(Math.random() * unusedBox.length)]?.counter)
     }
     return () => clearInterval(timerId);
-  }, [turnTimeLeft, currentPlayer]);
+  }, [turnTimeLeft, currentPlayer, gameStarted]);
 
 
   useEffect(() => {
@@ -297,7 +299,8 @@ const GameBoardPage = () => {
             </div>
           )}
           {isLoading && gameCompleted && (
-            <div>
+            <div style={{ position: 'relative' }}>
+              <button style={{ position: 'absolute', right: -10, top: 10 }} onClick={() => history.push("/")}>New Game</button>
               <h1 className='board-header'>Game Over</h1>
               <div>
                 <img src={`${players.find((player) => player.id === socket.id).name == winner ? '/images/win.gif' : '/images/loss.gif'}`} alt='game over' />
@@ -324,42 +327,40 @@ const GameBoardPage = () => {
                   </table>
                 </div>
 
-                {players.map((player) => {
-                  if (player.id === socket.id) {
-                    return (
-                      <div key={player.id} className='player-details'>
-                        <h2>Your Questions Details</h2>
-                        <table className='detailsTable'>
-                          <thead>
-                            <tr>
-                              <th>Question</th>
-                              <th>Your Answer</th>
-                              <th>Is Correct</th>
+                {players.map((player) => (
+                  <>
+                    {player.id === socket.id && <div key={player.id} className='player-details'>
+                      <h2>Your Questions Details</h2>
+                      <table className='detailsTable'>
+                        <thead>
+                          <tr>
+                            <th>Question</th>
+                            <th>Your Answer</th>
+                            <th>Is Correct</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {player.questions.map((question) => (
+                            <tr key={question.question}>
+                              <td>{question.question}</td>
+                              <td>{question.answer}</td>
+                              <td>
+                                {question.isCorrect ?
+                                  <span style={{ color: 'green' }}>
+                                    <BiCheck style={{ fontSize: '20px' }} />
+                                  </span>
+                                  :
+                                  <span style={{ color: 'red' }}>
+                                    <BiX style={{ fontSize: '20px' }} />
+                                  </span>}
+                              </td>
                             </tr>
-                          </thead>
-                          <tbody>
-                            {player.questions.map((question) => (
-                              <tr key={question.question}>
-                                <td>{question.question}</td>
-                                <td>{question.answer}</td>
-                                <td>
-                                  {question.isCorrect ?
-                                    <span style={{ color: 'green' }}>
-                                      <BiCheck style={{ fontSize: '20px' }} />
-                                    </span>
-                                    :
-                                    <span style={{ color: 'red' }}>
-                                      <BiX style={{ fontSize: '20px' }} />
-                                    </span>}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    );
-                  }
-                })}
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>}
+                  </>
+                ))}
               </div>
             </div>
           )}

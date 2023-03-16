@@ -19,7 +19,7 @@ const Square = ({ value, onClick, item, cssClass }) => {
       {value.counter !== null ? (
         <>
           <div className='counter'>
-            {item?.alreadyPlayed ? <BiLock style={{ color: "red" }} /> : value}
+            {item?.alreadyPlayed ? <BiLock style={{ color: "red" }} /> : value + 1}
           </div>
         </>
       ) : (

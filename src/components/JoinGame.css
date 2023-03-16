@@ -1,5 +1,5 @@
 .join-game-container {
-  min-width: 400px;
+  width: 400px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -43,7 +43,6 @@ button[type="submit"] {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 20px;
 }
 
 button[type="submit"]:hover {
