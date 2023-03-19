@@ -4,7 +4,6 @@ import { BiCheck, BiX } from "react-icons/bi";
 import { BsClockHistory } from "react-icons/bs";
 import { useHistory, useParams } from "react-router-dom";
 import socket from "../socket";
-import AudioPlayer from "./AudioPlayer";
 import CustomShareButton from "./CustomShareButton";
 import "./GameBoardPage.css"; // Import the CSS file
 import QuestionModal from "./QuestionModal";
@@ -168,8 +167,6 @@ const GameBoardPage = () => {
 
   return (
     <div className='game-board'>
-          <AudioPlayer />
-
       {!gameStarted && !isLoading ? (
         <div className='lobby-section witing-screen'>
           <div className="waitting-container">
