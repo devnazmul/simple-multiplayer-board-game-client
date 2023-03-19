@@ -168,13 +168,14 @@ const GameBoardPage = () => {
   return (
     <div className='game-board'>
       {!gameStarted && !isLoading ? (
-        <div className='lobby-section'>
-          <h1>Waiting for the game to start...</h1>
+        <div className='lobby-section witing-screen'>
+          <div className="waitting-container">
+          <h1 style={{textAlign:'center',margin:'20px 0px'}}>Waiting for the game to start...</h1>
           <table className='detailsTable'>
             <tbody>
               <tr>
                 <td>
-                  <label>Join Link:</label>
+                  Join Link:
                 </td>
                 <td>
                   <div
@@ -214,6 +215,7 @@ const GameBoardPage = () => {
               )}
             </tbody>
           </table>
+          </div>
         </div>
       ) : (
         <>

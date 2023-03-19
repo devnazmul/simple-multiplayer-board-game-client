@@ -63,7 +63,7 @@ const NewGameForm = () => {
 
   return (
     <div className='new-game-container'>
-      <h2>Create New Game</h2>
+      <h2 style={{textAlign:'center',marginBottom:'10px'}}>Create New Game</h2>
       {errorMessage && <div className='error-message'>*{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
         <div>

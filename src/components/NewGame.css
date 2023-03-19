@@ -1,11 +1,11 @@
 .new-game-container {
   width: 400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 25px;
   background-color: #f7f7f7;
-  height: 400px;
+  height: 430px;
 }
 
 form {

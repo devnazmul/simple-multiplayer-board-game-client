@@ -5,6 +5,7 @@ game-board-page {
 
 .lobby-section {
   width: 60%;
+  height: 100vh;
 }
 
 .board-section {

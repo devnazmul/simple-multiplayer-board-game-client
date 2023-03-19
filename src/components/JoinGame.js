@@ -68,7 +68,7 @@ const JoinGame = () => {
 
   return (
     <div className='join-game-container'>
-      <h2>Join a Game</h2>
+      <h2  style={{textAlign:'center',marginBottom:'10px'}}>Join a Game</h2>
       {errorMessage && <div className='error-message'>*{errorMessage}</div>}
       {successMessage && (
         <div className='success-message'>{successMessage}</div>
