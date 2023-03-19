@@ -4,6 +4,7 @@ import { BiCheck, BiX } from "react-icons/bi";
 import { BsClockHistory } from "react-icons/bs";
 import { useHistory, useParams } from "react-router-dom";
 import socket from "../socket";
+import CustomShareButton from "./CustomShareButton";
 import "./GameBoardPage.css"; // Import the CSS file
 import QuestionModal from "./QuestionModal";
 import Square from "./Square";
@@ -31,6 +32,8 @@ const GameBoardPage = () => {
 
   const [turnTimeLeft, setTurnTimeLeft] = useState(10);
 
+  const [playerWhoseTurnItIs, setPlayerWhoseTurnItIs] = useState();
+
 
 
   useEffect(() => {
@@ -50,12 +53,14 @@ const GameBoardPage = () => {
 
   useEffect(() => {
     const handleScoreChange = (data) => {
+      setPlayerWhoseTurnItIs(data?.players.find(p => p?.nextTurn === true)?.name)
       setGameDetails(data);
       setBoard(data.board);
       setPlayers(data.players);
       setJoinedPlayers(data?.players.length);
       setTurnTimeLeft(10)
     };
+
     // subscribe to the scoreChange event
     socket.on("scoreChange", handleScoreChange);
 
@@ -155,6 +160,7 @@ const GameBoardPage = () => {
   });
 
   socket.on("game-started", (data) => {
+    setPlayerWhoseTurnItIs(data?.game?.players.find(p => p?.nextTurn === true)?.name)
     setGameStarted(true);
     setTurnTimeLeft(10)
   });
@@ -170,7 +176,20 @@ const GameBoardPage = () => {
                 <td>
                   <label>Join Link:</label>
                 </td>
-                <td>https://simple-multiplayer-board-game-client.vercel.app/join-game/{gameId}</td>
+                <td>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}>
+                    <span>https://simple-multiplayer-board-game-client.vercel.app/join-game/{gameId}</span>
+                    <CustomShareButton
+                      url={`https://simple-multiplayer-board-game-client.vercel.app/join-game/${gameId}`}
+                      title='Share the game link to your friends'
+                    />
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td>Number of Players:</td>
@@ -255,7 +274,7 @@ const GameBoardPage = () => {
                   </table>
                   <div>
                     {!(currentPlayer && currentPlayer.nextTurn) ?
-                      <h2 style={{ textAlign: "center", color: 'red' }}>Please wait for your.</h2>
+                      <h2 style={{ textAlign: "center", color: 'red' }}>It's {playerWhoseTurnItIs}'s Turn. Please wait for your.</h2>
                       :
                       <h2 style={{ textAlign: "center", color: 'green' }}>Its your turn. Please Select A Box</h2>
                     }
