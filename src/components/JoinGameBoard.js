@@ -68,7 +68,7 @@ const JoinGameBoard = () => {
 
   return (
     <div>
-      <h1 style={{ textAlign: 'center', fontSize: '50px' }}>Math Champ</h1>
+      <h1 style={{ textAlign: 'center', fontSize: '40px',margin:'20px 0px' }}>Math Gasme</h1>
       <div className='join-game-container'>
 
         <h2>Join a Game</h2>
