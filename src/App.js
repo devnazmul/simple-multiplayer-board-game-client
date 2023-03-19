@@ -12,14 +12,16 @@ function App() {
   const audioRef = useRef(null);
 
   useEffect(() => {
-    audioRef.current.play();
+    setTimeout(()=>{
+      audioRef.current.play();
     audioRef.current.loop = true;
+    },2000)
   }, [audioRef]);
 
 
   return (
     <>
-    <audio ref={audioRef} >
+    <audio style={{display:'none'}} ref={audioRef} controls >
         <source src="/audio/background-lobby.ogg" type="audio/mpeg" />
       </audio>
       <Router>
