@@ -67,35 +67,39 @@ const JoinGameBoard = () => {
   };
 
   return (
-    <div className='join-game-container'>
-      <h1 style={{textAlign:'center',fontSize:'50px'}}>Math Champ</h1>
-      <h2>Join a Game</h2>
-      {errorMessage && <div className='error-message'>*{errorMessage}</div>}
-      {successMessage && (
-        <div className='success-message'>{successMessage}</div>
-      )}
-      <form onSubmit={handleJoinGame}>
-        <div className='form-group'>
-          <label htmlFor='gameId'>Game ID:</label>
-          <input
-            type='text'
-            id='gameId'
-            value={gameId}
-            disabled={true}
-          />
-        </div>
-        <div className='form-group'>
-          <label htmlFor='playerName'>Player Name:</label>
-          <input
-            type='text'
-            id='playerName'
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-          />
-        </div>
-        <button type='submit'>Join Game</button>
-      </form>
+    <div>
+      <h1 style={{ textAlign: 'center', fontSize: '50px' }}>Math Champ</h1>
+      <div className='join-game-container'>
+
+        <h2>Join a Game</h2>
+        {errorMessage && <div className='error-message'>*{errorMessage}</div>}
+        {successMessage && (
+          <div className='success-message'>{successMessage}</div>
+        )}
+        <form onSubmit={handleJoinGame}>
+          <div className='form-group'>
+            <label htmlFor='gameId'>Game ID:</label>
+            <input
+              type='text'
+              id='gameId'
+              value={gameId}
+              disabled={true}
+            />
+          </div>
+          <div className='form-group'>
+            <label htmlFor='playerName'>Player Name:</label>
+            <input
+              type='text'
+              id='playerName'
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+            />
+          </div>
+          <button type='submit'>Join Game</button>
+        </form>
+      </div>
     </div>
+
   );
 };
 
