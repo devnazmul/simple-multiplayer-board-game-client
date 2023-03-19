@@ -12,18 +12,15 @@ function App() {
   const audioRef = useRef(null);
 
   useEffect(() => {
-    setTimeout(()=>{
-      audioRef.current.play();
-    audioRef.current.loop = true;
-    },2000)
+      setTimeout(()=>{
+        audioRef.current.play();
+        audioRef.current.loop = true;
+      },5000)
   }, [audioRef]);
 
 
   return (
     <>
-    <audio style={{display:'none'}} ref={audioRef} controls >
-        <source src="/audio/background-lobby.ogg" type="audio/mpeg" />
-      </audio>
       <Router>
         <Switch>
           <Route exact path='/' component={Lobby} />
