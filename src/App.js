@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import GameBoardPage from "./components/GameBoardPage";
@@ -8,17 +8,8 @@ import Lobby from "./components/Lobby";
 
 function App() {
   axios.defaults.baseURL = "https://simple-socket-io-multi-player-math-game.onrender.com";
-
-  const audioRef = useRef(null);
-
-  useEffect(() => {
-      setTimeout(()=>{
-        audioRef.current.play();
-        audioRef.current.loop = true;
-      },5000)
-  }, [audioRef]);
-
-
+  // axios.defaults.baseURL = "http://localhost:5000";
+  
   return (
     <>
       <Router>
