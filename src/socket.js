@@ -1,6 +1,7 @@
 import io from "socket.io-client";
 
 const ENDPOINT = "https://simple-socket-io-multi-player-math-game.onrender.com";
+// const ENDPOINT = "http://localhost:5000";
 // const socket = io(ENDPOINT);
 const socket = io(ENDPOINT, {
   transports: ["websocket"],
