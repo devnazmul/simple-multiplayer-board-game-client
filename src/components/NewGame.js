@@ -62,14 +62,14 @@ const NewGameForm = () => {
   });
 
   return (
-    <div className='new-game-container'>
-      <h2 style={{textAlign:'center',marginBottom:'10px'}}>Create New Game</h2>
+    <>
       {errorMessage && <div className='error-message'>*{errorMessage}</div>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            * Player Name:
+      <form className="newGameForm" onSubmit={handleSubmit}>
+        <div className="formRow">
+          <div className="singleInputContainer">
+            <label htmlFor="player">* Player Name</label>
             <input
+              id="player"
               type='text'
               value={playerName}
               onChange={(e) =>
@@ -78,12 +78,11 @@ const NewGameForm = () => {
                 )
               }
             />
-          </label>
-        </div>
-        <div>
-          <label>
-            * How Many Questions (50-200):
+          </div>
+          <div className="singleInputContainer">
+            <label htmlFor="questions">* How Many Questions (50-200)</label>
             <input
+              id="questions"
               type='number'
               min='50'
               max='200'
@@ -94,12 +93,15 @@ const NewGameForm = () => {
                 )
               }
             />
-          </label>
+          </div>
         </div>
-        <div>
-          <label>
-            * Number of Players (minimum 2):
+
+
+        <div className="formRow">
+          <div className="singleInputContainer">
+            <label htmlFor="players">* Number of Players (minimum 2)</label>
             <input
+              id="players"
               type='number'
               min='2'
               value={numPlayers}
@@ -109,23 +111,26 @@ const NewGameForm = () => {
                 )
               }
             />
-          </label>
-        </div>
-        <div>
-          <label>
-            * Number of Turns (5-20):
+          </div>
+          <div className="singleInputContainer">
+            <label htmlFor="turn"> * Number of Turns (5-20)</label>
             <input
+              id="turn"
               type='number'
               min='5'
               max='20'
               value={numTurns}
-              onChange={(e) =>setNumTurns(e.target.value.trim() !== "" ? parseInt(e.target.value) : "")}
+              onChange={(e) => setNumTurns(e.target.value.trim() !== "" ? parseInt(e.target.value) : "")}
             />
-          </label>
+          </div>
         </div>
-        <button type='submit'>Create Game</button>
+
+        <button type='submit' class="fancy-button bg-gradient1">
+          <span>Create New Game</span>
+        </button>
+ 
       </form>
-    </div>
+    </>
   );
 };
 

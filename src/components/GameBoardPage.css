@@ -149,3 +149,45 @@ game-board-page {
 .player-details td:last-child::before.incorrect {
   background-color: red;
 }
+
+.main-graphical-gameboard-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+
+.main-graphical-gameboard-container div:nth-child(1) {
+  display: inline-block;
+  background-color: aqua;
+  height: 100%;
+  width: 20%;
+}
+.main-graphical-gameboard-container div:nth-child(2) {
+  display: block;
+  height: 100%;
+  width: 60%;
+}
+.main-graphical-gameboard-container div:nth-child(3) {
+  display: inline-block;
+  background-color: rgb(255, 5, 5);
+  height: 100%;
+  width: 20%;
+}
+
+.main-graphical-gameboard-container {
+  background-color: #dae7f6;
+}
+.game-board {
+  display: block;
+}
+.col-2 {
+  width: 100%;
+  display: block;
+  background-image: url("../../public/images/game-board.png");
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}

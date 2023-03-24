@@ -67,11 +67,9 @@ const JoinGameBoard = () => {
   };
 
   return (
-    <div>
-      <h1 style={{ textAlign: 'center', fontSize: '40px',margin:'20px 0px' }}>Math Gasme</h1>
-      <div className='join-game-container'>
-
-        <h2>Join a Game</h2>
+    <div className='join-game-container'>
+      <div className="join-game-form-container">
+        <h2 className="join-game-title">Join in a Game</h2>
         {errorMessage && <div className='error-message'>*{errorMessage}</div>}
         {successMessage && (
           <div className='success-message'>{successMessage}</div>
@@ -95,11 +93,12 @@ const JoinGameBoard = () => {
               onChange={(e) => setPlayerName(e.target.value)}
             />
           </div>
-          <button type='submit'>Join Game</button>
+          <button type='submit' class="fancy-button bg-gradient1">
+            <span>Join Game</span>
+          </button>
         </form>
       </div>
     </div>
-
   );
 };
 
