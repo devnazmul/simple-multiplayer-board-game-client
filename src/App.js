@@ -8,8 +8,8 @@ import JoinGameBoard from "./components/JoinGameBoard";
 import Lobby from "./components/Lobby";
 
 function App() {
-  // axios.defaults.baseURL = "https://simple-socket-io-multi-player-math-game.onrender.com";
-  axios.defaults.baseURL = "http://localhost:5000";
+  axios.defaults.baseURL = "https://simple-socket-io-multi-player-math-game.onrender.com";
+  // axios.defaults.baseURL = "http://localhost:5000";
   
   return (
     <>
