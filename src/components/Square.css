@@ -1,7 +1,6 @@
 .square {
-  width: 50px;
-  height: 50px;
-  border: 1px solid black;
+  width: 5em;
+  height: 5em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,10 +8,19 @@
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border-radius: 10px;
+  border: none;
+  transition: 0.5s;
 }
-
+.lock {
+  width: 50%;
+}
 .square:hover {
-  background-color: #e0e0e0;
+  transform: scale(0.9);
 }
 
 .square.active {
@@ -20,7 +28,11 @@
 }
 
 .counter {
-  font-size: 40px;
+  font-size: 20px;
+  color: #fff;
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .question {
@@ -69,127 +81,64 @@
   height: 80px;
 }
 
-.square-0 {
-  background-color: #efa6b1;
-  color: #4c4c4c;
+@media only screen and (max-width: 1440px) {
+  /*Tablets [1025px -> 1440px]*/
+  .square {
+    width: 5.5em;
+    height: 5.5em;
+  }
+  .counter {
+    font-size: 20px;
+  }
 }
-.square-1 {
-  background-color: #b399c6;
-  color: #4c4c4c;
+@media only screen and (max-width: 1024px) {
+  /*Tablets [769px -> 1024px]*/
+  .square {
+    width: 4.3em;
+    height: 4.3em;
+  }
 }
-.square-2 {
-  background-color: #87ceeb;
-  color: #4c4c4c;
+@media only screen and (max-width: 768px) {
+  /*Big smartphones [601px -> 768px]*/
+  .square {
+    width: 3.3em;
+    height: 3.3em;
+  }
 }
-.square-3 {
-  background-color: #9cd99c;
-  color: #4c4c4c;
+@media only screen and (max-width: 600px) {
+  /*Big smartphones [426px -> 600px]*/
+  .square {
+    width: 4em;
+    height: 4em;
+  }
 }
-.square-4 {
-  background-color: #ffff99;
-  color: #4c4c4c;
+@media only screen and (max-width: 425px) {
+  /*Small smartphones [376px -> 425px]*/
+  .square {
+    width: 2em !important;
+    height: 2em !important;
+  }
+  .counter {
+    font-size: 12px;
+  }
 }
-.square-5 {
-  background-color: #f7aa4c;
-  color: #4c4c4c;
+@media only screen and (max-width: 375px) {
+  /*Small smartphones [321px -> 375px]*/
+  .square {
+    width: 2em !important;
+    height: 2em !important;
+  }
+  .counter {
+    font-size: 12px;
+  }
 }
-
-.square-6 {
-  background-color: #ffe0e0;
-  color: #4c4c4c;
-}
-
-.square-7 {
-  background-color: #e8d0f9;
-  color: #4c4c4c;
-}
-
-.square-8 {
-  background-color: #c1fbc1;
-  color: #4c4c4c;
-}
-
-.square-9 {
-  background-color: #c2f0ff;
-  color: #4c4c4c;
-}
-
-.square-10 {
-  background-color: #a6e1ec;
-  color: #4c4c4c;
-}
-
-.square-11 {
-  background-color: #ffb6c1;
-  color: #4c4c4c;
-}
-
-.square-12 {
-  background-color: #e6e6fa;
-  color: #4c4c4c;
-}
-
-.square-13 {
-  background-color: #ffff99;
-  color: #4c4c4c;
-}
-
-.square-14 {
-  background-color: #87ceeb;
-  color: #4c4c4c;
-}
-
-.square-15 {
-  background-color: #ffffcc;
-  color: #4c4c4c;
-}
-
-.square-16 {
-  background-color: #add8e6;
-  color: #4c4c4c;
-}
-
-.square-17 {
-  background-color: #ffe0e0;
-  color: #4c4c4c;
-}
-
-.square-18 {
-  background-color: #e8d0f9;
-  color: #4c4c4c;
-}
-
-.square-19 {
-  background-color: #b3ffb3;
-  color: #4c4c4c;
-}
-
-.square-20 {
-  background-color: #c2f0ff;
-  color: #4c4c4c;
-}
-
-.square-21 {
-  background-color: #fff2cc;
-  color: #4c4c4c;
-}
-
-.square-22 {
-  background-color: #ffb6c1;
-  color: #4c4c4c;
-}
-
-.square-23 {
-  background-color: #e6e6fa;
-  color: #4c4c4c;
-}
-
-.square-24 {
-  background-color: #ffff99;
-  color: #4c4c4c;
-}
-
-.square-25 {
-  background-color: #87ceeb;
-  color: #4c4c4c;
+@media only screen and (max-width: 320px) {
+  /*Small smartphones [0px -> 320px]*/
+  .square {
+    width: 2em !important;
+    height: 2em !important;
+  }
+  .counter {
+    font-size: 10px;
+  }
 }

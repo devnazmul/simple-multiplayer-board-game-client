@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
 import { BiCheck, BiX } from "react-icons/bi";
+import { BsClockHistory } from "react-icons/bs";
 import { useHistory, useParams } from "react-router-dom";
 import socket from "../socket";
 import CustomShareButton from "./CustomShareButton";
 import "./GameBoardPage.css"; // Import the CSS file
+import QuestionModal from "./QuestionModal";
 import Square from "./Square";
 
 const GameBoardPage = () => {
@@ -218,32 +220,91 @@ const GameBoardPage = () => {
           </div>
         </div>
       ) : (
-
-
         <>
           {!isLoading && !gameCompleted && (
-            <div className="main-graphical-gameboard-container">
-              <div className="col-1">x</div>
-              <div className="col-2">
-                <div className='game-board'>
-                  {board !== undefined &&
-                    board.map((item, index) => (
-                      <div key={index}>
-                        <div>
-                          <Square
-                            item={item}
-                            key={index}
-                            value={item.counter}
-                            onClick={() => handleSquareClick(item.counter)}
-                            cssClass={`square-${index % 5}`}
-                          />
-                        </div>
-                      </div>
-                    ))}
+            <div style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              height: 'auto',
+            }}>
+              <div className="game-name">
+                <img src="/images/game-board-title.png" alt="" />
+              </div>
+              <div className="timer-container">
+                <div className="timer">
+                  <img src="/images/timer.png" alt="" />
+                  <span className="timer-text">
+                    {(currentPlayer && currentPlayer.nextTurn && turnTimeLeft !== -1) ? <span style={{
+                      display:'flex',
+                      alignItems:'center',
+                      gap:10
+                    }} ><BsClockHistory /> 00:{turnTimeLeft} sec</span>: <span style={{
+                      fontSize:'15px',
+                      lineHeight:'20px',
+                    }}> <span style={{display:'block'}}>It's another's</span>  <span style={{display:'block'}}>player's Turn</span></span> }
+                  </span>
                 </div>
               </div>
-              <div className="col-3">z</div>
+
+              <div className="main-graphical-gameboard-container">
+                <div className="col-1">
+                  <div className="score">
+                    <table>
+                      {gameDetails?.players !== undefined &&
+                        gameDetails?.players.map((player) => (
+                          <tr style={{ width: '100%' }} key={player.id}>
+                            <td >
+                              {player.id === socket.id ? (
+                                <strong>{player.name}</strong>
+                              ) : (
+                                player.name
+                              )}
+                            </td>
+                            <td>{player.score}</td>
+                          </tr>
+                        ))}
+                    </table>
+                  </div>
+                </div>
+
+                <div className="col-2">
+                  <img className="gameBoardImage" src="/images/game-board.png" alt="" srcset="" />
+                  <div className='main-game-board'>
+                    {board !== undefined &&
+                      board.map((item, index) => (
+                        <div key={index}>
+                          <div>
+                            <Square
+                              item={item}
+                              i={index}
+                              value={item.counter}
+                              onClick={() => handleSquareClick(item.counter)}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    {showModal && board !== undefined && (
+                      <QuestionModal
+                        timeLeft={timeLeft}
+                        setTimeLeft={setTimeLeft}
+                        question={{
+                          operand1: board[selectedSquare].operand1,
+                          operator: board[selectedSquare].operator,
+                          operand2: board[selectedSquare].operand2,
+                        }}
+                        onClose={handleModalClose}
+                        onSubmit={handleAnswerSubmit}
+                        isOpen={showModal}
+                        setIsOpen={setShowModal}
+                      />
+                    )}
+                  </div>
+                </div>
+                <div className="col-3"></div>
+              </div>
             </div>
+
             // <div>
             //   <h1 className='board-header'>Game Board</h1>
             //   <div>
