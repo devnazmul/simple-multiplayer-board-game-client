@@ -236,21 +236,28 @@ const GameBoardPage = () => {
                   <img src="/images/timer.png" alt="" />
                   <span className="timer-text">
                     {(currentPlayer && currentPlayer.nextTurn && turnTimeLeft !== -1) ? <span style={{
-                      display:'flex',
-                      alignItems:'center',
-                      gap:10
-                    }} ><BsClockHistory /> 00:{turnTimeLeft} sec</span>: <span style={{
-                      fontSize:'15px',
-                      lineHeight:'20px',
-                    }}> <span style={{display:'block'}}>It's another's</span>  <span style={{display:'block'}}>player's Turn</span></span> }
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10
+                    }} ><BsClockHistory /> 00:{turnTimeLeft} sec</span> : <span style={{
+                      fontSize: '15px',
+                      lineHeight: '20px',
+                    }}> <span style={{ display: 'block' }}>It's another's</span>  <span style={{ display: 'block' }}>player's Turn</span></span>}
                   </span>
                 </div>
               </div>
 
               <div className="main-graphical-gameboard-container">
                 <div className="col-1">
+                  <img className="gameScoreImage" src="/images/game-soreboard.png" alt="" />
                   <div className="score">
-                    <table>
+                    <table className="scoreTable">
+                      <thead>
+                        <tr>
+                          <th className="scoreTableHead">Player</th>
+                          <th className="scoreTableHead">Score</th>
+                        </tr>
+                      </thead>
                       {gameDetails?.players !== undefined &&
                         gameDetails?.players.map((player) => (
                           <tr style={{ width: '100%' }} key={player.id}>
