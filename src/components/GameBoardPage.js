@@ -249,30 +249,33 @@ const GameBoardPage = () => {
 
               <div className="main-graphical-gameboard-container">
                 <div className="col-1">
-                  <img className="gameScoreImage" src="/images/game-soreboard.png" alt="" />
-                  <div className="score">
-                    <table className="scoreTable">
-                      <thead>
-                        <tr>
-                          <th className="scoreTableHead">Player</th>
-                          <th className="scoreTableHead">Score</th>
-                        </tr>
-                      </thead>
-                      {gameDetails?.players !== undefined &&
-                        gameDetails?.players.map((player) => (
-                          <tr style={{ width: '100%' }} key={player.id}>
-                            <td >
-                              {player.id === socket.id ? (
-                                <strong>{player.name}</strong>
-                              ) : (
-                                player.name
-                              )}
-                            </td>
-                            <td>{player.score}</td>
+                  <div className="score-container">
+                    <img className="gameScoreImage" src="/images/game-soreboard.png" alt="" />
+                    <div className="score">
+                      <table className="scoreTable">
+                        <thead>
+                          <tr>
+                            <th className="scoreTableHead">Player</th>
+                            <th className="scoreTableHeadScore">Score</th>
                           </tr>
-                        ))}
-                    </table>
+                        </thead>
+                        {gameDetails?.players !== undefined &&
+                          gameDetails?.players.map((player) => (
+                            <tr style={{ width: '100%' }} key={player.id}>
+                              <td >
+                                {player.id === socket.id ? (
+                                  <strong>{player.name}</strong>
+                                ) : (
+                                  player.name
+                                )}
+                              </td>
+                              <td className="scoreCol">{player.score}</td>
+                            </tr>
+                          ))}
+                      </table>
+                    </div>
                   </div>
+                  <img className="cat-image" src="/images/cat.png" alt="" />
                 </div>
 
                 <div className="col-2">
@@ -308,7 +311,33 @@ const GameBoardPage = () => {
                     )}
                   </div>
                 </div>
-                <div className="col-3"></div>
+
+                <div className="col-3">
+                  <img className="player-board" src="/images/game-player.png" alt="" />
+                  <div className="players-board">
+                      <table className="scoreTable">
+                        <thead>
+                          <tr>
+                            <th className="scoreTableHead">Player</th>
+                            <th className="scoreTableHeadScore">Score</th>
+                          </tr>
+                        </thead>
+                        {gameDetails?.players !== undefined &&
+                          gameDetails?.players.map((player) => (
+                            <tr style={{ width: '100%' }} key={player.id}>
+                              <td >
+                                {player.id === socket.id ? (
+                                  <strong>{player.name}</strong>
+                                ) : (
+                                  player.name
+                                )}
+                              </td>
+                              <td className="scoreCol">{player.score}</td>
+                            </tr>
+                          ))}
+                      </table>
+                    </div>
+                </div>
               </div>
             </div>
 
