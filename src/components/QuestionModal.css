@@ -1,55 +1,279 @@
-.modal {
+.MathQuestionModal {
+  box-sizing: border-box;
+  display: flex;
+  background: linear-gradient(0deg, #ecd9c9, #d9e9ff);
+  border: 2px solid #000;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 800px;
+  width: 90%;
+  height: auto;
+  padding: 36px 5px;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logoImageContainer {
+  width: 100%;
+  height: 50px;
+  margin: 10px 0px;
+  box-sizing: border-box;
+}
+.logoImageContainer img {
+  height: 100%;
+  width: auto;
+}
+.QuestionModaltimerContainer {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 20px 0px;
+}
+.QuestionModaltimerContainer span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 150px;
+  color: rgb(0, 128, 255);
+  font-size: 20px;
+}
+.QuestionModalCrossButton {
+  padding: 5px 20px;
+  background: rgb(255, 40, 40);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.QuestionForm {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.QuestionContainerFlex {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+.QuestionMath {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7em;
+  color: #fff;
+}
+.QuestionMath div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  width: 150px;
+}
+.QuestionMath div:nth-child(2) {
+  height: 150px;
+  width: 50px;
+}
 
-.paper {
-  background-color: #ffffff;
-  border: 2px solid #000000;
+.mathOparations {
+  color: rgb(0, 128, 255);
+}
+.AnsContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.AnsContainer div {
   border-radius: 10px;
-  box-shadow: 0px 3px 22px rgba(0, 0, 0, 0.5);
-  padding: 24px;
-  text-align: center;
-  max-width: 500px;
-  width: 80%;
+  background-color: #fff;
+  height: 150px !important;
+  width: 150px !important;
+  color: rgb(0, 128, 255);
+  font-size: 7em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-.closeButton {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+.QuestionAndField {
+  height: 150px;
+  width: 150px;
+  font-size: 90px !important;
+  display: block;
+  border: none !important;
+  color: rgb(0, 128, 255);
 }
-
-.answerInput {
-  width: 80%;
-  height: 40px;
-  margin-bottom: 16px;
-}
-
 .submitButton {
-  background-color: #009688;
-  color: #ffffff;
-  border-radius: 5px;
-  padding: 8px 16px;
+  width: 200px;
+  margin-top: 20px;
+  border: none;
+  outline: none;
+  background-color: rgb(0, 128, 255);
+  color: #fff;
+  font-size: 19px;
+  padding: 5px 10px;
+  border-radius: 30px;
   cursor: pointer;
-  margin-bottom: 16px;
 }
 
-.successMessage {
-  color: green;
-  font-size: 18px;
-  margin-top: 16px;
+@media only screen and (max-width: 500px) {
+  .QuestionAndField {
+    height: 120px;
+    width: 120px;
+    font-size: 90px !important;
+  }
+  .QuestionMath {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 7em;
+    color: #fff;
+  }
+  .QuestionMath div {
+    height: 120px;
+    width: 120px;
+  }
+  .AnsContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .AnsContainer div {
+    height: 120px !important;
+    width: 120px !important;
+    font-size: 7em;
+  }
+}
+@media only screen and (max-width: 460px) {
+  .QuestionAndField {
+    height: 80px;
+    width: 80px;
+    font-size: 40px !important;
+  }
+  .QuestionMath {
+    box-sizing: border-box;
+    padding: 0px 50px;
+    justify-content: space-between;
+  }
+  .QuestionMath div {
+    height: 150px;
+    width: 150px;
+    font-size: 50px;
+  }
+  .QuestionMath div:nth-child(2) {
+    width: 10px;
+  }
+  .AnsContainer {
+    box-sizing: border-box;
+    padding: 0px 50px;
+    justify-content: space-between;
+  }
+  .AnsContainer div {
+    height: 150px !important;
+    width: 150px !important;
+    font-size: 4em;
+  }
 }
 
-.errorMessage {
-  color: red;
-  font-size: 18px;
-  margin-top: 16px;
+.QuestionAndField::-webkit-inner-spin-button,
+.QuestionAndField::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
+@media only screen and (max-width: 414px) {
+  .QuestionModaltimerContainer span {
+    font-size: 20px;
+  }
+  .QuestionAndField {
+    height: 80px;
+    width: 80px;
+    font-size: 40px !important;
+  }
+  .QuestionMath {
+    box-sizing: border-box;
+    padding: 0px 70px;
+    justify-content: space-between;
+  }
+  .QuestionMath div {
+    height: 100px;
+    width: 100px;
+    font-size: 50px;
+  }
+  .QuestionMath div:nth-child(2) {
+    width: 10px;
+    height: 100px;
+  }
+  .AnsContainer {
+    box-sizing: border-box;
+    padding: 0px 70px;
+    justify-content: space-between;
+  }
+  .AnsContainer div {
+    height: 100px !important;
+    width: 100px !important;
+    font-size: 4em;
+  }
+}
+@media only screen and (max-width: 375px) {
+  .QuestionModaltimerContainer span {
+    font-size: 20px;
+  }
+  .QuestionAndField {
+    height: 80px;
+    width: 80px;
+    font-size: 40px !important;
+  }
+  .QuestionMath {
+    box-sizing: border-box;
+    padding: 0px 70px;
+    justify-content: space-between;
+  }
+  .QuestionMath div {
+    height: 100px;
+    width: 100px;
+    font-size: 50px;
+  }
+  .QuestionMath div:nth-child(2) {
+    width: 10px;
+    height: 100px;
+  }
+  .AnsContainer {
+    box-sizing: border-box;
+    padding: 0px 70px;
+    justify-content: space-between;
+  }
+  .AnsContainer div {
+    height: 100px !important;
+    width: 100px !important;
+    font-size: 4em;
+  }
+}
+@media only screen and (max-width: 280px) {
+  .QuestionModaltimerContainer {
+    gap: 0;
+  }
+  .logoImageContainer img {
+    width: 150px;
+    height: auto;
+  }
+  .QuestionMath {
+    box-sizing: border-box;
+    padding: 0px 100px;
+    justify-content: space-between;
+  }
 
-.timer {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
+  .AnsContainer {
+    box-sizing: border-box;
+    padding: 0px 110px;
+    justify-content: space-between;
+  }
+  .AnsContainer div {
+    height: 80px !important;
+    width: 80px !important;
+    font-size: 4em;
+  }
 }

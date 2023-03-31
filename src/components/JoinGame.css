@@ -11,13 +11,104 @@
   justify-content: center;
   align-items: center;
 }
-.join-game-form-container {
-  width: 400px;
-}
+
 .join-game-title {
   font-family: "Press Start 2P", cursive;
   line-height: 80px;
   font-size: 25px;
   color: #fc6c00;
   text-align: center;
+}
+.mobileJoinImage {
+  display: none;
+}
+.join-game-form-container {
+  width: 400px;
+}
+@media only screen and (max-width: 540px) {
+  .join-game-container {
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100vh;
+    background-color: #d8e9ff;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .mobileJoinImage {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+  }
+  .join-game-form-container {
+    position: absolute;
+    bottom: 0px;
+    width: 60%;
+    z-index: 10;
+    border-radius: 40px 40px 0px 0px;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    padding: 10px 10%;
+    height: 310px;
+    margin: 0;
+  }
+  .join-game-form-container h2 {
+    text-align: center;
+    font-size: 13px;
+    line-height: 20px;
+    margin-bottom: 10px;
+  }
+}
+@media only screen and (max-width: 425px) {
+  .join-game-form-container {
+    width: 90%;
+  }
+  .mobileJoinImage {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+  }
+}
+@media only screen and (max-width: 375px) {
+  .join-game-form-container {
+    width: 90%;
+  }
+  .mobileJoinImage {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+  }
+}
+@media only screen and (max-width: 320px) {
+  .join-game-form-container {
+    width: 80%;
+  }
+  .mobileJoinImage {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+  }
 }

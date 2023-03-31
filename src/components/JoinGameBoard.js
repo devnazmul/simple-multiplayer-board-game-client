@@ -68,6 +68,7 @@ const JoinGameBoard = () => {
 
   return (
     <div className='join-game-container'>
+      <img className="mobileJoinImage" src="/images/mobileHome.webp" alt="" />
       <div className="join-game-form-container">
         <h2 className="join-game-title">Join in a Game</h2>
         {errorMessage && <div className='error-message'>*{errorMessage}</div>}

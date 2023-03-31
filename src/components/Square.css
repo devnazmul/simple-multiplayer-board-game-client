@@ -28,6 +28,7 @@
 }
 
 .counter {
+  font-weight: bold;
   font-size: 20px;
   color: #fff;
   background-position: center center;
@@ -244,8 +245,8 @@
 @media only screen and (max-width: 600px) {
   /*Big smartphones [426px -> 600px]*/
   .square {
-    width: 3.2em;
-    height: 3.2em;
+    width: 3.3em;
+    height: 3.3em;
   }
 }
 @media only screen and (max-width: 525px) {
@@ -255,17 +256,67 @@
     height: 3em;
   }
 }
+@media only screen and (max-width: 478px) {
+  /*Small smartphones [376px -> 425px]*/
+  .square {
+    width: 2.8em !important;
+    height: 2.8em !important;
+  }
+  .counter {
+    font-size: 12px;
+  }
+}
+@media only screen and (max-width: 445px) {
+  /*Small smartphones [376px -> 425px]*/
+  .square {
+    width: 2.6em !important;
+    height: 2.6em !important;
+  }
+  .counter {
+    font-size: 12px;
+  }
+}
 @media only screen and (max-width: 425px) {
   /*Small smartphones [376px -> 425px]*/
   .square {
-    width: 2em !important;
-    height: 2em !important;
+    width: 2.5em !important;
+    height: 2.5em !important;
+  }
+  .counter {
+    font-size: 12px;
+  }
+}
+@media only screen and (max-width: 397px) {
+  /*Small smartphones [376px -> 425px]*/
+  .square {
+    width: 2.3em !important;
+    height: 2.3em !important;
   }
   .counter {
     font-size: 12px;
   }
 }
 @media only screen and (max-width: 375px) {
+  /*Small smartphones [321px -> 375px]*/
+  .square {
+    width: 2.2em !important;
+    height: 2.2em !important;
+  }
+  .counter {
+    font-size: 12px;
+  }
+}
+@media only screen and (max-width: 350px) {
+  /*Small smartphones [321px -> 375px]*/
+  .square {
+    width: 2.1em !important;
+    height: 2.1em !important;
+  }
+  .counter {
+    font-size: 12px;
+  }
+}
+@media only screen and (max-width: 340px) {
   /*Small smartphones [321px -> 375px]*/
   .square {
     width: 2em !important;
@@ -278,8 +329,28 @@
 @media only screen and (max-width: 320px) {
   /*Small smartphones [0px -> 320px]*/
   .square {
-    width: 2em !important;
-    height: 2em !important;
+    width: 1.9em !important;
+    height: 1.9em !important;
+  }
+  .counter {
+    font-size: 10px;
+  }
+}
+@media only screen and (max-width: 308px) {
+  /*Small smartphones [0px -> 320px]*/
+  .square {
+    width: 1.8em !important;
+    height: 1.8em !important;
+  }
+  .counter {
+    font-size: 10px;
+  }
+}
+@media only screen and (max-width: 290px) {
+  /*Small smartphones [0px -> 320px]*/
+  .square {
+    width: 1.7em !important;
+    height: 1.7em !important;
   }
   .counter {
     font-size: 10px;

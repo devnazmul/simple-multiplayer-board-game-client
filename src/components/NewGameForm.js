@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import socket from "../socket";
-import "./NewGame.css";
+import "./NewGameForm.css";
 
 const NewGameForm = () => {
   const [playerName, setPlayerName] = useState("");
@@ -126,7 +126,7 @@ const NewGameForm = () => {
         </div>
 
         <button type='submit' class="fancy-button bg-gradient1">
-          <span>Create New Game</span>
+          <span>New Game</span>
         </button>
  
       </form>

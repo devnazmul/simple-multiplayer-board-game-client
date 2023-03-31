@@ -1,13 +1,11 @@
 import axios from "axios";
-import React, { Fragment, useEffect, useState } from "react";
-import { BiCheck, BiX } from "react-icons/bi";
-import { BsClockHistory } from "react-icons/bs";
+import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import socket from "../socket";
-import CustomShareButton from "./CustomShareButton";
 import "./GameBoardPage.css"; // Import the CSS file
-import QuestionModal from "./QuestionModal";
-import Square from "./Square";
+import GameOverScreen from "./GameOverScreen";
+import MainGameScreen from "./MainGameScreen";
+import WaitingScreen from "./WaitingScreen";
 
 const GameBoardPage = () => {
   const { gameId, numberOfPlayer } = useParams();
@@ -34,7 +32,7 @@ const GameBoardPage = () => {
 
   const [playerWhoseTurnItIs, setPlayerWhoseTurnItIs] = useState();
 
-
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   useEffect(() => {
     let timerId;
@@ -167,347 +165,37 @@ const GameBoardPage = () => {
 
   return (
     <div className='game-board'>
-
-
       {!gameStarted && !isLoading ? (
-        <div className='lobby-section witing-screen'>
-          <div className="waitting-container">
-            <h1 style={{ textAlign: 'center', margin: '20px 0px' }}>Waiting for the game to start...</h1>
-            <table className='detailsTable'>
-              <tbody>
-                <tr>
-                  <td>
-                    Join Link:
-                  </td>
-                  <td>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}>
-                      <span>https://simple-multiplayer-board-game-client.vercel.app/join-game/{gameId}</span>
-                      <CustomShareButton
-                        url={`https://simple-multiplayer-board-game-client.vercel.app/join-game/${gameId}`}
-                        title='Share the game link to your friends'
-                      />
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Number of Players:</td>
-                  <td>{numberOfPlayer}</td>
-                </tr>
-
-                {gameDetails && (
-                  <React.Fragment>
-                    <tr>
-                      <td>Players Joined:</td>
-                      <td>{gameDetails.players.length}</td>
-                    </tr>
-                    <tr>
-                      <td>Your Name:</td>
-                      <td>
-                        {gameDetails.players
-                          .map((player) => player.name)
-                          .join(", ")}
-                      </td>
-                    </tr>
-                  </React.Fragment>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <WaitingScreen
+          gameId={gameId}
+          numberOfPlayer={numberOfPlayer}
+          gameDetails={gameDetails}
+        />
       ) : (
         <>
           {!isLoading && !gameCompleted && (
-            <div style={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              height: 'auto',
-            }}>
-              <div className="game-name">
-                <img src="/images/game-board-title.png" alt="" />
-              </div>
-              <div className="timer-container">
-                <div className="timer">
-                  <img src="/images/timer.png" alt="" />
-                  <span className="timer-text">
-                    {(currentPlayer && currentPlayer.nextTurn && turnTimeLeft !== -1) ? <span style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10
-                    }} ><BsClockHistory /> 00:{turnTimeLeft} sec</span> : <span style={{
-                      fontSize: '15px',
-                      lineHeight: '20px',
-                    }}> <span style={{ display: 'block' }}>It's another's</span>  <span style={{ display: 'block' }}>player's Turn</span></span>}
-                  </span>
-                </div>
-              </div>
-
-              <div className="main-graphical-gameboard-container">
-                <div className="col-1">
-                  <div className="score-container">
-                    <img className="gameScoreImage" src="/images/game-soreboard.png" alt="" />
-                    <div className="score">
-                      <table className="scoreTable">
-                        <thead>
-                          <tr>
-                            <th className="scoreTableHead">Player</th>
-                            <th className="scoreTableHeadScore">Score</th>
-                          </tr>
-                        </thead>
-                        {gameDetails?.players !== undefined &&
-                          gameDetails?.players.map((player) => (
-                            <tr style={{ width: '100%' }} key={player.id}>
-                              <td >
-                                {player.id === socket.id ? (
-                                  <strong>{player.name}</strong>
-                                ) : (
-                                  player.name
-                                )}
-                              </td>
-                              <td className="scoreCol">{player.score}</td>
-                            </tr>
-                          ))}
-                      </table>
-                    </div>
-                  </div>
-                  <img className="cat-image" src="/images/cat.png" alt="" />
-                </div>
-
-                <div className="col-2">
-                  <img className="gameBoardImage" src="/images/game-board.png" alt="" srcset="" />
-                  <div className='main-game-board'>
-                    {board !== undefined &&
-                      board.map((item, index) => (
-                        <div key={index}>
-                          <div>
-                            <Square
-                              item={item}
-                              i={index}
-                              value={item.counter}
-                              onClick={() => handleSquareClick(item.counter)}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                    {showModal && board !== undefined && (
-                      <QuestionModal
-                        timeLeft={timeLeft}
-                        setTimeLeft={setTimeLeft}
-                        question={{
-                          operand1: board[selectedSquare].operand1,
-                          operator: board[selectedSquare].operator,
-                          operand2: board[selectedSquare].operand2,
-                        }}
-                        onClose={handleModalClose}
-                        onSubmit={handleAnswerSubmit}
-                        isOpen={showModal}
-                        setIsOpen={setShowModal}
-                      />
-                    )}
-                  </div>
-                </div>
-
-                <div className="col-3">
-                  <img className="player-board" src="/images/game-player.png" alt="" />
-                  <div className="players-board">
-                      <table className="scoreTable">
-                        <thead>
-                          <tr>
-                            <th className="scoreTableHead">Player</th>
-                            <th className="scoreTableHeadScore">Score</th>
-                          </tr>
-                        </thead>
-                        {gameDetails?.players !== undefined &&
-                          gameDetails?.players.map((player) => (
-                            <tr style={{ width: '100%' }} key={player.id}>
-                              <td >
-                                {player.id === socket.id ? (
-                                  <strong>{player.name}</strong>
-                                ) : (
-                                  player.name
-                                )}
-                              </td>
-                              <td className="scoreCol">{player.score}</td>
-                            </tr>
-                          ))}
-                      </table>
-                    </div>
-                </div>
-              </div>
-            </div>
-
-            // <div>
-            //   <h1 className='board-header'>Game Board</h1>
-            //   <div>
-            //     <div className='board-section'>
-            //       <table className='detailsTable'>
-            //         <thead>
-            //           <tr>
-            //             <th>Player</th>
-            //             <th>Score</th>
-            //           </tr>
-            //         </thead>
-            //         <tbody>
-            //           {gameDetails?.players !== undefined &&
-            //             gameDetails?.players.map((player) => (
-            //               <tr key={player.id}>
-            //                 <td>
-            //                   {player.id === socket.id ? (
-            //                     <strong>{player.name}</strong>
-            //                   ) : (
-            //                     player.name
-            //                   )}
-            //                 </td>
-            //                 <td>{player.score}</td>
-            //               </tr>
-            //             ))}
-            //           <tr>
-            //             <td>
-            //               <strong>Board Size:</strong>
-            //             </td>
-            //             <td>
-            //               {gameDetails.board !== undefined &&
-            //                 gameDetails?.board?.length}
-            //             </td>
-            //           </tr>
-            //           <tr>
-            //             <td>
-            //               <strong>Number of Players:</strong>
-            //             </td>
-            //             <td>{gameDetails?.numPlayers}</td>
-            //           </tr>
-            //           <tr>
-            //             <td>
-            //               <strong>Number of Turns:</strong>
-            //             </td>
-            //             <td>{gameDetails?.numTurns}</td>
-            //           </tr>
-            //           <tr>
-            //             <td>
-            //               <strong>Players Joined:</strong>
-            //             </td>
-            //             <td>{joinedPlayers}</td>
-            //           </tr>
-            //         </tbody>
-            //       </table>
-            //       <div>
-            //         {!(currentPlayer && currentPlayer.nextTurn) ?
-            //           <h2 style={{ textAlign: "center", color: 'red' }}>It's {playerWhoseTurnItIs}'s Turn. Please wait for your.</h2>
-            //           :
-            //           <h2 style={{ textAlign: "center", color: 'green' }}>Its your turn. Please Select A Box</h2>
-            //         }
-            //       </div>
-            //       {(currentPlayer && currentPlayer.nextTurn && turnTimeLeft !== -1) && <h4 style={{ display: 'flex', gap: 3, justifyContent: 'center', alignItems: 'center' }}>Your turn end in : <BsClockHistory /> {turnTimeLeft} sec</h4>}
-            //     </div>
-
-            //     <div className='game-board'>
-            //       {board !== undefined &&
-            //         board.map((item, index) => (
-            //           <div className='game-board-row' key={index}>
-            //             <div className='game-board-col'>
-            //               <Square
-            //                 item={item}
-            //                 key={index}
-            //                 value={item.counter}
-            //                 onClick={() => handleSquareClick(item.counter)}
-            //                 cssClass={`square-${index % 5}`}
-            //               />
-            //             </div>
-            //           </div>
-            //         ))}
-            //     </div>
-
-            //     {showModal && board !== undefined && (
-            //       <QuestionModal
-            //         timeLeft={timeLeft}
-            //         setTimeLeft={setTimeLeft}
-            //         question={{
-            //           operand1: board[selectedSquare].operand1,
-            //           operator: board[selectedSquare].operator,
-            //           operand2: board[selectedSquare].operand2,
-            //         }}
-            //         onClose={handleModalClose}
-            //         onSubmit={handleAnswerSubmit}
-            //         isOpen={showModal}
-            //         setIsOpen={setShowModal}
-            //       />
-            //     )}
-            //   </div>
-            // </div>
+            <MainGameScreen
+              currentPlayer={currentPlayer}
+              turnTimeLeft={turnTimeLeft}
+              gameDetails={gameDetails}
+              socket={socket}
+              board={board}
+              handleSquareClick={handleSquareClick}
+              showModal={showModal}
+              timeLeft={timeLeft}
+              setTimeLeft={setTimeLeft}
+              selectedSquare={selectedSquare}
+              handleModalClose={handleModalClose}
+              handleAnswerSubmit={handleAnswerSubmit}
+              setShowModal={setShowModal}
+              playerWhoseTurnItIs={playerWhoseTurnItIs}
+              joinedPlayers={joinedPlayers}
+            />
           )}
 
 
-
           {isLoading && gameCompleted && (
-            <div style={{ position: 'relative' }}>
-              <button style={{ position: 'absolute', right: -10, top: 10 }} onClick={() => history.push("/")}>New Game</button>
-              <h1 className='board-header'>Game Over</h1>
-              <div>
-                <img style={{ width: '100%', height: 'auto' }} src={`${players.find((player) => player.id === socket.id).name == winner ? '/images/win.gif' : '/images/loss.gif'}`} alt='game over' />
-                <h2>Game Winner: {winner}</h2>
-                <div className='player-ranking'>
-                  <h2>Player Ranking</h2>
-                  <table className='detailsTable'>
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Score</th>
-                        <th>Turns</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {playersRanking.map((player) => (
-                        <tr key={player.id}>
-                          <td>{player.name}</td>
-                          <td>{player.score}</td>
-                          <td>{player.turns}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                {players.map((player) => (
-                  <Fragment key={player?.id}>
-                    {player.id === socket.id && <div key={player.id} className='player-details'>
-                      <h2>Your Questions Details</h2>
-                      <table className='detailsTable'>
-                        <thead>
-                          <tr>
-                            <th>Question</th>
-                            <th>Your Answer</th>
-                            <th>Is Correct</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {player.questions.map((question) => (
-                            <tr key={question.question}>
-                              <td>{question.question}</td>
-                              <td>{question.answer}</td>
-                              <td>
-                                {question.isCorrect ?
-                                  <span style={{ color: 'green' }}>
-                                    <BiCheck style={{ fontSize: '20px' }} />
-                                  </span>
-                                  :
-                                  <span style={{ color: 'red' }}>
-                                    <BiX style={{ fontSize: '20px' }} />
-                                  </span>}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>}
-                  </Fragment>
-                ))}
-              </div>
-            </div>
+            <GameOverScreen players={players} socket={socket} winner={winner} playersRanking={playersRanking} />
           )}
         </>
       )}

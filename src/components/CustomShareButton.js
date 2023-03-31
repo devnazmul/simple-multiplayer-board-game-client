@@ -16,6 +16,7 @@ const CustomShareButton = ({ url, title }) => {
 
     return (
         <button
+        className='shareButton'
             style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -30,7 +31,7 @@ const CustomShareButton = ({ url, title }) => {
                 borderRadius:'30px'
             }}
             onClick={handleShare}>
-            <BsShare /> Share
+            <BsShare /> <span className='shareText'>Share</span> 
         </button>
     );
 };

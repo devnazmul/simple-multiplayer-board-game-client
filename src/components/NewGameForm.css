@@ -47,6 +47,7 @@ input {
   gap: 30px;
   width: 100%;
 }
+
 .formRow:nth-child(2) {
   margin-top: 20px;
 }
@@ -140,4 +141,35 @@ input {
 }
 .fancy-button:active span {
   filter: brightness(0.75) contrast(1.7);
+}
+
+@media only screen and (max-width: 540px) {
+  .newGameForm {
+    width: 100%;
+  }
+  .formRow {
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+  }
+  input {
+    padding: 1px 10px !important;
+    border-radius: 8px !important;
+    border: 1px solid #fc6c00 !important;
+  }
+  label {
+    font-size: 10px;
+  }
+  .formRow {
+    gap: 5px;
+  }
+  .formRow:nth-child(2) {
+    margin-top: 5px;
+  }
+  .fancy-button {
+    line-height: 1px;
+  }
+  .fancy-button span {
+    border-radius: 8px;
+  }
 }

@@ -1,35 +1,26 @@
 import {
-  Backdrop, Box, Button, Fade, makeStyles,
-  Modal, TextField, Typography
+  Backdrop, Box, Fade, makeStyles,
+  Modal, Typography
 } from "@material-ui/core";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { MdAlarm } from "react-icons/md";
+import "./QuestionModal.css";
+
 
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    boxSizing: 'border-box',
+    padding: '20px'
   },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    borderRadius: "10px",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-    textAlign: "center",
-    maxWidth: 500,
-    width: "80%",
-  },
-
   closeButton: {
     position: "absolute",
     top: "-10px",
     right: "-25px",
   },
-  answerInput: {
-    width: "100px",
-    marginLeft: "10px",
-  },
+
   submitButton: {
     backgroundColor: "#009688",
     color: "#fff",
@@ -59,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
   },
   questionContainer: {
-    marginTop: "50px",
+    marginTop: "10px",
   },
   questionAndAnsContainer: {
     display: "flex",
@@ -91,7 +82,6 @@ const QuestionModal = ({
         if (timeLeft == 1) {
           handleCancel();
           setIsOpen(false)
-
         }
       }, 1000);
     }
@@ -116,7 +106,7 @@ const QuestionModal = ({
 
   return (
     <Modal
-      className={classes.modal}
+      className={`${classes.modal}`}
       open={isOpen}
       onClose={handleCancel}
       closeAfterTransition
@@ -124,51 +114,70 @@ const QuestionModal = ({
       BackdropProps={{ timeout: 500 }}
     >
       <Fade in={isOpen}>
-        <div className={classes.paper}>
-          <Box position='relative'>
-            <Button
-              className={classes.closeButton}
+        <div className="MathQuestionModal">
+          <div className="logoImageContainer">
+            <img src="/images/game-board-title.png" alt="" />
+          </div>
+          <div className="QuestionModaltimerContainer">
+            <div>
+
+              {showTimer && (
+                <span>
+                  <MdAlarm />
+                  Time left: {timeLeft}
+                </span>
+              )}
+            </div>
+            <button
+              className="QuestionModalCrossButton"
               onClick={handleCancel}
               variant='contained'
               color='secondary'
             >
               X
-            </Button>
-            {showTimer && (
-              <Typography className={classes.timer}>
-                Time left: {timeLeft}
-              </Typography>
-            )}
-          </Box>
-          <form className={classes.questionContainer} onSubmit={handleSubmit}>
-            <Box className={classes.questionAndAnsContainer}>
-              <Typography variant='h5'>
-                {question.operand1}{" "}
-                {question.operator === "/"
-                  ? "÷"
-                  : question.operator === "*"
-                    ? "×"
-                    : question.operator}{" "}
-                {question.operand2} =
-              </Typography>
+            </button>
+          </div>
 
-              <TextField
-                className={classes.answerInput}
-                variant='outlined'
-                type='number'
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-              />
+
+          <form className={`${classes.questionContainer} QuestionForm`} onSubmit={handleSubmit}>
+            <Box className={`${classes.questionAndAnsContainer} QuestionContainerFlex`}>
+              <div className="QuestionMath">
+                <div>{question.operand1}</div>
+
+                <div className="mathOparations">
+                  {
+                    question.operator === "/"
+                      ? "÷"
+                      : question.operator === "*"
+                        ? "×"
+                        : question.operator
+                  }
+                </div>
+                <div>{question.operand2}</div>
+
+              </div>
+              <div className="AnsContainer">
+                <div>=</div>
+                <div>
+                  <input
+                    step="any"
+                    className={`QuestionAndField`}
+                    type='number'
+                    value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
+                  />
+                </div>
+              </div>
+
             </Box>
 
-            <Button
-              className={classes.submitButton}
+            <button
+              className={`submitButton`}
               type='submit'
-              variant='contained'
               disableElevation
             >
               Submit
-            </Button>
+            </button>
           </form>
           {success && (
             <Typography className={classes.successMessage}>
